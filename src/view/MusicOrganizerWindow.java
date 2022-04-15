@@ -108,12 +108,10 @@ public class MusicOrganizerWindow extends Application {
 				if(e.getClickCount()==2) {
 					// This code gets invoked whenever the user double clicks in the TreeView
 					// TODO: ADD YOUR CODE HERE
-					//  - show sound clip in album in soundclipview
+					//  - show sound clip in album in sound clip view
 					System.out.println("Double click in TreeView");
 				}
-				
 			}
-			
 		});
 		return v;
 	}

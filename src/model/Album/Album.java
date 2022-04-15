@@ -16,6 +16,7 @@ public abstract class Album implements AlbumInterface{
     List<SoundClip> songs;
 
     public Album(final String albumName){
+        assert albumName != null; // precondition
         // constructor
         this.albumName = albumName;
         this.subAlbums = new ArrayList<SubAlbum>() {};
@@ -26,6 +27,7 @@ public abstract class Album implements AlbumInterface{
     @Override
     public boolean add(final SoundClip clip){
         // adds a song to this album if it doesn't contain it
+        assert clip != null;  // precondition
         if (!contains(clip)){
             this.songs.add(clip);
         }
@@ -36,6 +38,7 @@ public abstract class Album implements AlbumInterface{
     @Override
     public boolean add(SubAlbum album){
         // adds an album to the list of sub-albums, returns boolean for testing purposes
+        assert album != null;  // precondition
         if (!contains(album)){
             this.subAlbums.add(album);
             assert invariant();
@@ -47,6 +50,7 @@ public abstract class Album implements AlbumInterface{
     @Override
     public boolean remove(final SoundClip clip){
         // removes a song from this album and all sub-albums, returns boolean for testing purposes
+        assert clip != null;  // precondition
         if (contains(clip)){
             this.songs.remove(clip);
             for (SubAlbum album: this.subAlbums){
@@ -60,6 +64,7 @@ public abstract class Album implements AlbumInterface{
     @Override
     public boolean remove(final SubAlbum album){
         // removes an album for list of sub-albums, returns boolean for testing purposes
+        assert album != null;  // precondition
         if (contains(album)){
             this.subAlbums.remove(album);
             assert invariant();
@@ -70,29 +75,34 @@ public abstract class Album implements AlbumInterface{
     @Override
     public boolean contains(final SubAlbum album){
         // checks if this objects contains an album
+        assert album != null;  // precondition
         return this.subAlbums.contains(album);
     }
 
     @Override
     public boolean contains(final SoundClip clip){
         // checks if this objects contains a song
+        assert clip != null;  // precondition
         return this.songs.contains(clip);
     }
 
     public void setAlbumName(final String albumName){
         // sets a new album name
-        if (albumName != null) {
-            this.albumName = albumName;
-        }
+        assert albumName != null;  // precondition
+
+        this.albumName = albumName;
+
         assert invariant();
     }
 
     public SoundClip getSong(final int i){
+        assert i >= 0;  // precondition, don't allow negative numbers
         // returns song at index i
         return this.songs.get(i);
     }
 
     public SubAlbum getSubAlbum(final int i){
+        assert i >= 0;  // precondition, don't allow negative numbers
         // returns album at index i
         return this.subAlbums.get(i);
     }
