@@ -23,8 +23,9 @@ public class SoundClipLoader {
 		Set<SoundClip> set = new HashSet<SoundClip>();
 
 		if (path == null) return set;
-
+		System.out.println("here");
 		File f = new File(path);
+		System.out.println(f.isDirectory());
 		if (!f.isDirectory()) return set;
 
 		addSoundClipsToSet(f, set);

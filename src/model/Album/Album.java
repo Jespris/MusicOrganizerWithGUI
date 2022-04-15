@@ -12,14 +12,14 @@ public abstract class Album implements AlbumInterface{
 
     // instance variables for this class
     String albumName;
-    List<SubAlbum> subAlbums;
+    List<Album> subAlbums;
     List<SoundClip> songs;
 
     public Album(final String albumName){
         assert albumName != null; // precondition
         // constructor
         this.albumName = albumName;
-        this.subAlbums = new ArrayList<SubAlbum>() {};
+        this.subAlbums = new ArrayList<Album>() {};
         this.songs = new ArrayList<SoundClip>();
     }
 
@@ -36,7 +36,7 @@ public abstract class Album implements AlbumInterface{
         return true;
     }
     @Override
-    public boolean add(SubAlbum album){
+    public boolean add(Album album){
         // adds an album to the list of sub-albums, returns boolean for testing purposes
         assert album != null;  // precondition
         if (!contains(album)){
@@ -53,7 +53,7 @@ public abstract class Album implements AlbumInterface{
         assert clip != null;  // precondition
         if (contains(clip)){
             this.songs.remove(clip);
-            for (SubAlbum album: this.subAlbums){
+            for (Album album: this.subAlbums){
                 album.remove(clip);
             }
             assert invariant();
@@ -62,7 +62,7 @@ public abstract class Album implements AlbumInterface{
         return false;
     }
     @Override
-    public boolean remove(final SubAlbum album){
+    public boolean remove(final Album album){
         // removes an album for list of sub-albums, returns boolean for testing purposes
         assert album != null;  // precondition
         if (contains(album)){
@@ -73,7 +73,7 @@ public abstract class Album implements AlbumInterface{
         return false;
     }
     @Override
-    public boolean contains(final SubAlbum album){
+    public boolean contains(final Album album){
         // checks if this objects contains an album
         assert album != null;  // precondition
         return this.subAlbums.contains(album);
@@ -101,24 +101,24 @@ public abstract class Album implements AlbumInterface{
         return this.songs.get(i);
     }
 
-    public SubAlbum getSubAlbum(final int i){
+    public Album getSubAlbum(final int i){
         assert i >= 0;  // precondition, don't allow negative numbers
         // returns album at index i
         return this.subAlbums.get(i);
     }
 
-    public List<SubAlbum> getSubAlbums(){
+    public List<Album> getSubAlbums(){
         // returns an unmodifiable list of this object's sub-albums
-        return Collections.unmodifiableList(this.subAlbums);
+        return this.subAlbums;
     }
 
     public List<SoundClip> getSoundClips(){
         // returns an unmodifiable list of this object's songs
-        return Collections.unmodifiableList(this.songs);
+        return this.songs;
     }
 
     public boolean invariant(){  // invariant method for album
-        for (SubAlbum album: this.subAlbums){
+        for (Album album: this.subAlbums){
             if (!album.invariant()){
                 return false;
             }
@@ -142,6 +142,7 @@ public abstract class Album implements AlbumInterface{
     @Override
     public int hashCode(){
         // returns unique hashCode based on instance variables
+        assert invariant();
         int hash = 7;
         int prime = 31;
         hash = prime * hash + this.albumName.hashCode();

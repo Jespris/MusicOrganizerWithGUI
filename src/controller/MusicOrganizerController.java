@@ -1,5 +1,7 @@
 package controller;
 
+import java.awt.*;
+import java.awt.image.ImageObserver;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -61,7 +63,7 @@ public class MusicOrganizerController {
 		// if none selected => parent album is null => root album is parent (defined in SubAlbum constructor)
 		// albumName comes from ? => Set album name to default "New Album"?
 		Album parent = view.getSelectedAlbum();  // get parent album
-		String albumName = JOptionPane.showInputDialog("Album name: ");
+		String albumName = view.promptForAlbumName();
 		Album newAlbum = new SubAlbum(albumName, parent);
 		view.onAlbumAdded(newAlbum);
 	}
@@ -74,12 +76,14 @@ public class MusicOrganizerController {
 		// delete currently selected album (and all it's subAlbums?)
 		Album album = view.getSelectedAlbum();
 		if (album == RootAlbum.get()){
-
-		} else {
-			for (SubAlbum subAlbum : album.getSubAlbums()) {
+			System.out.println("Cannot remove root album!");
+			JOptionPane.showMessageDialog(null, "Cannot delete root album!", "ERROR", JOptionPane.ERROR_MESSAGE);
+		} else if (album != null){
+			for (Album subAlbum : album.getSubAlbums()) {
 				album.remove(subAlbum);
 			}
 			album.getParentAlbum().remove(album);
+			view.onAlbumRemoved();
 		}
 	}
 	
@@ -90,6 +94,14 @@ public class MusicOrganizerController {
 		// TODO: Add your code here
 		// add sound clip to currently selected album (which automatically adds the clip to all parents)
 		// if no album is selected => add to root?
+		Album selectedAlbum = view.getSelectedAlbum();
+		if (selectedAlbum == null){
+			selectedAlbum = RootAlbum.get();
+		}
+		for (SoundClip clip: view.getSelectedSoundClips()){
+			selectedAlbum.add(clip);
+		}
+
 	}
 	
 	/**

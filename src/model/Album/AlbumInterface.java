@@ -6,8 +6,8 @@ public interface AlbumInterface {
     // interface for making sure that the album class contains all the necessary methods
     boolean add(final SoundClip clip);
     boolean remove(final SoundClip clip);
-    boolean add(SubAlbum album);
-    boolean remove(final SubAlbum album);
-    boolean contains(final SubAlbum album);
+    boolean add(Album album);
+    boolean remove(final Album album);
+    boolean contains(final Album album);
     boolean contains(final SoundClip clip);
 }

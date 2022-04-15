@@ -110,6 +110,7 @@ public class MusicOrganizerWindow extends Application {
 					// TODO: ADD YOUR CODE HERE
 					//  - show sound clip in album in sound clip view
 					System.out.println("Double click in TreeView");
+					onClipsUpdated();
 				}
 			}
 		});
