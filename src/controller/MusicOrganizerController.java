@@ -39,7 +39,15 @@ public class MusicOrganizerController {
 	public Set<SoundClip> loadSoundClips(String path) {
 		// TODO: Add the loaded sound clips to the root album
 
-		return SoundClipLoader.loadSoundClips(path);
+		Set<SoundClip> clips = SoundClipLoader.loadSoundClips(path);
+
+		for (SoundClip clip: clips){
+			System.out.println("Adding clip: " + clip.toString());
+			RootAlbum.get().add(clip);
+		}
+
+		System.out.println("Root album has " + RootAlbum.get().getSoundClips().size() + " sound clips");
+		return clips;
 	}
 	
 	public void registerView(MusicOrganizerWindow view) {
@@ -101,7 +109,7 @@ public class MusicOrganizerController {
 		for (SoundClip clip: view.getSelectedSoundClips()){
 			selectedAlbum.add(clip);
 		}
-
+		view.onClipsUpdated();
 	}
 	
 	/**
@@ -110,6 +118,15 @@ public class MusicOrganizerController {
 	public void removeSoundClips(){ //TODO Update parameters if needed
 		// TODO: Add your code here
 		// remove from currently selected album currently selected soundclip(s)
+		Album album = view.getSelectedAlbum();
+		if (album != null) {
+			for (SoundClip clip : view.getSelectedSoundClips()) {
+				album.remove(clip);
+			}
+			view.onClipsUpdated();
+		} else {
+			view.displayMessage("Cannot remove sound clip(s) without an album selected!");
+		}
 	}
 	
 	/**
@@ -118,6 +135,7 @@ public class MusicOrganizerController {
 	 * this method is called, the selected sound clips in the 
 	 * SoundClipTable are played.
 	 */
+
 	public void playSoundClips(){
 		List<SoundClip> l = view.getSelectedSoundClips();
 		queue.enqueue(l);

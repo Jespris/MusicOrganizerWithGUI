@@ -19,14 +19,16 @@ public class SoundClipLoader {
 	 * returns an empty set.
 	 */
 	public static Set<SoundClip> loadSoundClips(String path) {
-		assert path!=null && path!="";
+		assert path!=null && !path.equals("");
 		Set<SoundClip> set = new HashSet<SoundClip>();
 
-		if (path == null) return set;
-		System.out.println("here");
 		File f = new File(path);
-		System.out.println(f.isDirectory());
-		if (!f.isDirectory()) return set;
+		System.out.println("file path is directory: " + f.isDirectory());
+		if (!f.isDirectory()) {
+			System.out.println("file path is not a directory...");
+			System.out.println("path: " + f.getPath());
+			return set;
+		}
 
 		addSoundClipsToSet(f, set);
 		return set;
