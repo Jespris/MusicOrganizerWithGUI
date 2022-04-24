@@ -46,6 +46,7 @@ public class MusicOrganizerController {
 			RootAlbum.get().add(clip);
 		}
 
+		// for testing purposes, print nr of sound clips loaded to root
 		System.out.println("Root album has " + RootAlbum.get().getSoundClips().size() + " sound clips");
 		return clips;
 	}
@@ -58,6 +59,7 @@ public class MusicOrganizerController {
 	 * Returns the root album
 	 */
 	public Album getRootAlbum(){
+		// returns the RootAlbum singleton
 		return RootAlbum.get();
 	}
 	
@@ -69,10 +71,10 @@ public class MusicOrganizerController {
 		// TODO: Add your code here
 		// the currently selected album as parent,
 		// if none selected => parent album is null => root album is parent (defined in SubAlbum constructor)
-		// albumName comes from ? => Set album name to default "New Album"?
-		Album parent = view.getSelectedAlbum();  // get parent album
+		// albumName comes from the input prompt
+		Album parent = view.getSelectedAlbum();  // get parent album from selection
 		String albumName = view.promptForAlbumName();
-		Album newAlbum = new SubAlbum(albumName, parent);
+		Album newAlbum = new SubAlbum(albumName, parent);  // if parent is null, parent is set to root in constructor
 		view.onAlbumAdded(newAlbum);
 	}
 	
@@ -84,14 +86,13 @@ public class MusicOrganizerController {
 		// delete currently selected album (and all it's subAlbums?)
 		Album album = view.getSelectedAlbum();
 		if (album == RootAlbum.get()){
-			System.out.println("Cannot remove root album!");
-			JOptionPane.showMessageDialog(null, "Cannot delete root album!", "ERROR", JOptionPane.ERROR_MESSAGE);
-		} else if (album != null){
+			view.displayMessage("Cannot remove root album!");
+		} else if (album != null){  // check if selection is null
 			for (Album subAlbum : album.getSubAlbums()) {
-				album.remove(subAlbum);
+				album.remove(subAlbum);  // remove all subalbums to album, method is recursive
 			}
-			album.getParentAlbum().remove(album);
-			view.onAlbumRemoved();
+			album.getParentAlbum().remove(album);  // remove self from parent list of sub album
+			view.onAlbumRemoved();  // update view
 		}
 	}
 	
@@ -101,15 +102,15 @@ public class MusicOrganizerController {
 	public void addSoundClips(){ //TODO Update parameters if needed
 		// TODO: Add your code here
 		// add sound clip to currently selected album (which automatically adds the clip to all parents)
-		// if no album is selected => add to root?
+		// if no album is selected => add to root
 		Album selectedAlbum = view.getSelectedAlbum();
 		if (selectedAlbum == null){
 			selectedAlbum = RootAlbum.get();
 		}
 		for (SoundClip clip: view.getSelectedSoundClips()){
-			selectedAlbum.add(clip);
+			selectedAlbum.add(clip);  // add all selected soundclips to album
 		}
-		view.onClipsUpdated();
+		view.onClipsUpdated();  // update view
 	}
 	
 	/**
@@ -119,11 +120,11 @@ public class MusicOrganizerController {
 		// TODO: Add your code here
 		// remove from currently selected album currently selected soundclip(s)
 		Album album = view.getSelectedAlbum();
-		if (album != null) {
+		if (album != null) {  // check that selection isn't null
 			for (SoundClip clip : view.getSelectedSoundClips()) {
-				album.remove(clip);
+				album.remove(clip);  // remove clip
 			}
-			view.onClipsUpdated();
+			view.onClipsUpdated();  // update view
 		} else {
 			view.displayMessage("Cannot remove sound clip(s) without an album selected!");
 		}

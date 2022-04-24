@@ -39,6 +39,7 @@ public class MusicOrganizerWindow extends Application {
 	public static void main(String[] args) {
 		controller = new MusicOrganizerController();
 		if (args.length == 0) {
+			// path is for the moment absolute and only works on Jesper's computer
 			controller.loadSoundClips("C:\\Users\\jespe\\Downloads\\OOD_Task2_InitialFiles\\OOD_Task2_initialFiles_RENAME_PROJECT\\src\\sample-sound");
 		} else if (args.length == 1) {
 			controller.loadSoundClips(args[0]);
@@ -112,7 +113,7 @@ public class MusicOrganizerWindow extends Application {
 					//  - show sound clip in album in sound clip view
 					System.out.println("Double click in TreeView");
 					displayMessage("Currently selected album: " + getSelectedAlbum().toString());
-					onClipsUpdated();
+					onClipsUpdated();  // update clip view
 				}
 			}
 		});
@@ -131,7 +132,7 @@ public class MusicOrganizerWindow extends Application {
 				if (e.getClickCount() == 2) {
 					// This code gets invoked whenever the user double clicks in the sound clip table
 					// TODO: ADD YOUR CODE HERE
-					//  - Play the sound clip?
+					//  - Play the sound clip
 					System.out.println("Double click on sound clip table");
 					displayMessage("Playing selected sound clip(s)");
 					controller.playSoundClips();
