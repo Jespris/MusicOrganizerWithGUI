@@ -1,21 +1,14 @@
 package controller;
 
-import java.awt.*;
-import java.awt.image.ImageObserver;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import model.*;
 import model.Album.Album;
 import model.Album.RootAlbum;
-import model.Album.SubAlbum;
-import model.SoundClip;
-import model.SoundClipBlockingQueue;
-import model.SoundClipLoader;
-import model.SoundClipPlayer;
+import model.Commands.AddAlbumCommand;
+import model.Commands.RemoveAlbumCommand;
 import view.MusicOrganizerWindow;
-
-import javax.swing.*;
 
 public class MusicOrganizerController {
 
@@ -72,10 +65,10 @@ public class MusicOrganizerController {
 		// the currently selected album as parent,
 		// if none selected => parent album is null => root album is parent (defined in SubAlbum constructor)
 		// albumName comes from the input prompt
-		Album parent = view.getSelectedAlbum();  // get parent album from selection
+
 		String albumName = view.promptForAlbumName();
-		Album newAlbum = new SubAlbum(albumName, parent);  // if parent is null, parent is set to root in constructor
-		view.onAlbumAdded(newAlbum);
+		AddAlbumCommand command = new AddAlbumCommand(view.getSelectedAlbum(), albumName, this.view);
+		command.execute();
 	}
 	
 	/**
@@ -84,15 +77,12 @@ public class MusicOrganizerController {
 	public void deleteAlbum(){ //TODO Update parameters if needed
 		// TODO: Add your code here
 		// delete currently selected album (and all it's subAlbums?)
-		Album album = view.getSelectedAlbum();
-		if (album == RootAlbum.get()){
-			view.displayMessage("Cannot remove root album!");
-		} else if (album != null){  // check if selection is null
-			for (Album subAlbum : album.getSubAlbums()) {
-				album.remove(subAlbum);  // remove all subalbums to album, method is recursive
-			}
-			album.getParentAlbum().remove(album);  // remove self from parent list of sub album
-			view.onAlbumRemoved();  // update view
+		Album removedAlbum = view.getSelectedAlbum();
+		if (!removedAlbum.isRootAlbum()) {
+			RemoveAlbumCommand command = new RemoveAlbumCommand(removedAlbum.getParentAlbum(), removedAlbum, this.view);
+			command.execute();
+		} else {
+			this.view.displayMessage("Cannot remove root album!");
 		}
 	}
 	

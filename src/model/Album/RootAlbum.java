@@ -6,7 +6,7 @@ public class RootAlbum extends Album {
     // AND WE DO NOT WANT TO BE ABLE TO ACCIDENTALLY MAKE MULTIPLE ROOT ALBUMS BY MAKING A PUBLIC CONSTRUCTOR
 
     // instance variable "instance" calls the constructor
-    private static final RootAlbum instance = new RootAlbum("All Sound Clips");
+    private static RootAlbum instance;
 
     private RootAlbum(final String albumName){
         // constructor, which calls super
@@ -16,6 +16,9 @@ public class RootAlbum extends Album {
 
     public static RootAlbum get(){
         // this returns the rootAlbum
+        if (instance == null){
+            instance = new RootAlbum("All Sound Clips");
+        }
         return instance;
     }
 
