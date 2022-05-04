@@ -1,6 +1,7 @@
 package view;
 
 
+import controller.CommandController;
 import controller.MusicOrganizerController;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -18,6 +19,8 @@ public class ButtonPaneHBox extends HBox {
 	private Button addSoundClipsButton;
 	private Button removeSoundClipsButton;	
 	private Button playButton;
+	private Button undoButton;
+	private Button redoButton;
 	public static final int BUTTON_MIN_WIDTH = 150;
 
 	
@@ -41,10 +44,16 @@ public class ButtonPaneHBox extends HBox {
 		
 		playButton = createPlaySoundClipsButton();
 		this.getChildren().add(playButton);
+
+		undoButton = createUndoButton();
+		this.getChildren().add(undoButton);
+
+		redoButton = createRedoButton();
+		this.getChildren().add(redoButton);
 		
 
 	}
-	
+
 	/*
 	 * Each method below creates a single button. The buttons are also linked
 	 * with event handlers, so that they react to the user clicking on the buttons
@@ -127,6 +136,38 @@ public class ButtonPaneHBox extends HBox {
 				controller.playSoundClips();
 			}
 			
+		});
+		return button;
+	}
+
+	private Button createUndoButton() {
+		Button button = new Button("Undo action");
+		button.setTooltip(new Tooltip("Undo last actions up to 10"));
+		button.setMinWidth(BUTTON_MIN_WIDTH);
+		button.setOnAction(new EventHandler<ActionEvent>() {
+
+			@Override
+			public void handle(ActionEvent arg0) {
+				if (CommandController.get().hasCommands())
+					CommandController.get().undoLastCommand();
+			}
+
+		});
+		return button;
+	}
+
+	private Button createRedoButton() {
+		Button button = new Button("Redo action");
+		button.setTooltip(new Tooltip("Redo last undo action"));
+		button.setMinWidth(BUTTON_MIN_WIDTH);
+		button.setOnAction(new EventHandler<ActionEvent>() {
+
+			@Override
+			public void handle(ActionEvent arg0) {
+				if (CommandController.get().hasRedoableCommands())
+					CommandController.get().redoLastUndo();
+			}
+
 		});
 		return button;
 	}

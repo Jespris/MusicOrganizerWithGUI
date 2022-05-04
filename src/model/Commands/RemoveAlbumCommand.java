@@ -4,11 +4,11 @@ import model.Album.Album;
 import view.MusicOrganizerWindow;
 
 public class RemoveAlbumCommand extends Command {
-    Album parentAlbum;
-    Album removedAlbum;
-    MusicOrganizerWindow view;
+    private final Album parentAlbum;
+    private final Album removedAlbum;
+    private final MusicOrganizerWindow view;
 
-    public RemoveAlbumCommand(Album parentAlbum, Album removedAlbum, MusicOrganizerWindow view){
+    public RemoveAlbumCommand(final Album parentAlbum, final Album removedAlbum, final MusicOrganizerWindow view){
         this.parentAlbum = parentAlbum;
         this.removedAlbum = removedAlbum;
         this.view = view;

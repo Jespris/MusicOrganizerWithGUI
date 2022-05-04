@@ -7,6 +7,7 @@ import model.*;
 import model.Album.Album;
 import model.Album.RootAlbum;
 import model.Commands.AddAlbumCommand;
+import model.Commands.AddSoundClipCommand;
 import model.Commands.RemoveAlbumCommand;
 import view.MusicOrganizerWindow;
 
@@ -69,6 +70,7 @@ public class MusicOrganizerController {
 		String albumName = view.promptForAlbumName();
 		AddAlbumCommand command = new AddAlbumCommand(view.getSelectedAlbum(), albumName, this.view);
 		command.execute();
+		CommandController.get().addNewCommand(command);
 	}
 	
 	/**
@@ -81,6 +83,7 @@ public class MusicOrganizerController {
 		if (!removedAlbum.isRootAlbum()) {
 			RemoveAlbumCommand command = new RemoveAlbumCommand(removedAlbum.getParentAlbum(), removedAlbum, this.view);
 			command.execute();
+			CommandController.get().addNewCommand(command);
 		} else {
 			this.view.displayMessage("Cannot remove root album!");
 		}
@@ -97,9 +100,9 @@ public class MusicOrganizerController {
 		if (selectedAlbum == null){
 			selectedAlbum = RootAlbum.get();
 		}
-		for (SoundClip clip: view.getSelectedSoundClips()){
-			selectedAlbum.add(clip);  // add all selected soundclips to album
-		}
+		AddSoundClipCommand command = new AddSoundClipCommand(selectedAlbum, this.view.getSelectedSoundClips(), this.view);
+		command.execute();
+		CommandController.get().addNewCommand(command);
 		view.onClipsUpdated();  // update view
 	}
 	

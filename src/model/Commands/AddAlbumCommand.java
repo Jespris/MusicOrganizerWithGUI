@@ -6,12 +6,12 @@ import model.Album.SubAlbum;
 import view.MusicOrganizerWindow;
 
 public class AddAlbumCommand extends Command {
-    Album parentAlbum;
-    String newAlbumName;
-    MusicOrganizerWindow view;
-    Album newAlbum;
+    private Album parentAlbum;
+    private String newAlbumName;
+    private final MusicOrganizerWindow view;
+    private Album newAlbum;
 
-    public AddAlbumCommand(Album parent, String newAlbumName, MusicOrganizerWindow view){
+    public AddAlbumCommand(Album parent, String newAlbumName, final MusicOrganizerWindow view){
         this.parentAlbum = parent;
         if (this.parentAlbum == null){
             this.parentAlbum = RootAlbum.get();
