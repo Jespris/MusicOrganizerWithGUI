@@ -8,9 +8,9 @@ public class RemoveAlbumCommand extends Command {
     private final Album removedAlbum;
     private final MusicOrganizerWindow view;
 
-    public RemoveAlbumCommand(final Album parentAlbum, final Album removedAlbum, final MusicOrganizerWindow view){
-        this.parentAlbum = parentAlbum;
-        this.removedAlbum = removedAlbum;
+    public RemoveAlbumCommand(final Album album, final MusicOrganizerWindow view){
+        this.parentAlbum = album.getParentAlbum();
+        this.removedAlbum = album;
         this.view = view;
 
         assert this.parentAlbum != null && !this.removedAlbum.isRootAlbum() && this.view != null;

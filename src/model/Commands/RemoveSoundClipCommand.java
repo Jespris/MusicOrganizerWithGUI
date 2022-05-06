@@ -5,17 +5,18 @@ import model.SoundClip;
 import view.MusicOrganizerWindow;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class RemoveSoundClipCommand extends Command {
-    private final SoundClip[] clips;
-    private final ArrayList<SoundClip> removedClips;  // keep track of which clips were actually removed
+    private final List<SoundClip> clips;
+    private final List<SoundClip> removedClips;  // keep track of which clips were actually removed
     // (user can maybe try to remove clips that aren't in the selected album somehow maybe possibly?!?)
     private final Album album;
     private final MusicOrganizerWindow view;
 
-    public RemoveSoundClipCommand(final SoundClip[] clips, final Album album, final MusicOrganizerWindow view){
+    public RemoveSoundClipCommand(final List<SoundClip> clips, final Album album, final MusicOrganizerWindow view){
         this.clips = clips;
-        this.removedClips = new ArrayList<>();
+        this.removedClips = new ArrayList<SoundClip>();
         this.album = album;
         this.view = view;
 
@@ -24,7 +25,7 @@ public class RemoveSoundClipCommand extends Command {
 
     private boolean invariant() {
         // Can you remove clips from root album?
-        return this.clips != null && this.album != null && this.view != null;
+        return this.album != null && this.view != null;
     }
 
     @Override

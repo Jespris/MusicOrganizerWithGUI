@@ -9,6 +9,7 @@ import model.Album.RootAlbum;
 import model.Commands.AddAlbumCommand;
 import model.Commands.AddSoundClipCommand;
 import model.Commands.RemoveAlbumCommand;
+import model.Commands.RemoveSoundClipCommand;
 import view.MusicOrganizerWindow;
 
 public class MusicOrganizerController {
@@ -79,14 +80,14 @@ public class MusicOrganizerController {
 	public void deleteAlbum(){ //TODO Update parameters if needed
 		// TODO: Add your code here
 		// delete currently selected album (and all it's subAlbums?)
-		Album removedAlbum = view.getSelectedAlbum();
-		if (!removedAlbum.isRootAlbum()) {
-			RemoveAlbumCommand command = new RemoveAlbumCommand(removedAlbum.getParentAlbum(), removedAlbum, this.view);
+		if (this.view.getSelectedAlbum() != RootAlbum.get() || this.view.getSelectedAlbum() != null){
+			RemoveAlbumCommand command = new RemoveAlbumCommand(this.view.getSelectedAlbum(), this.view);
 			command.execute();
 			CommandController.get().addNewCommand(command);
 		} else {
 			this.view.displayMessage("Cannot remove root album!");
 		}
+
 	}
 	
 	/**
@@ -96,14 +97,9 @@ public class MusicOrganizerController {
 		// TODO: Add your code here
 		// add sound clip to currently selected album (which automatically adds the clip to all parents)
 		// if no album is selected => add to root
-		Album selectedAlbum = view.getSelectedAlbum();
-		if (selectedAlbum == null){
-			selectedAlbum = RootAlbum.get();
-		}
-		AddSoundClipCommand command = new AddSoundClipCommand(selectedAlbum, this.view.getSelectedSoundClips(), this.view);
+		AddSoundClipCommand command = new AddSoundClipCommand(view.getSelectedAlbum(), this.view.getSelectedSoundClips(), this.view);
 		command.execute();
 		CommandController.get().addNewCommand(command);
-		view.onClipsUpdated();  // update view
 	}
 	
 	/**
@@ -112,15 +108,9 @@ public class MusicOrganizerController {
 	public void removeSoundClips(){ //TODO Update parameters if needed
 		// TODO: Add your code here
 		// remove from currently selected album currently selected soundclip(s)
-		Album album = view.getSelectedAlbum();
-		if (album != null) {  // check that selection isn't null
-			for (SoundClip clip : view.getSelectedSoundClips()) {
-				album.remove(clip);  // remove clip
-			}
-			view.onClipsUpdated();  // update view
-		} else {
-			view.displayMessage("Cannot remove sound clip(s) without an album selected!");
-		}
+		RemoveSoundClipCommand command = new RemoveSoundClipCommand(this.view.getSelectedSoundClips(), this.view.getSelectedAlbum(), this.view);
+		command.execute();
+		CommandController.get().addNewCommand(command);
 	}
 	
 	/**
