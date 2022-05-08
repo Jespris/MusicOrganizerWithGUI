@@ -1,6 +1,7 @@
 package model.Commands;
 
 import model.Album.Album;
+import model.Album.RootAlbum;
 import model.SoundClip;
 import view.MusicOrganizerWindow;
 
@@ -8,16 +9,21 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class RemoveSoundClipCommand extends Command {
-    private final List<SoundClip> clips;
+    // command class for removing clips from album
+    private final List<SoundClip> clips;  // the inputted clips to remove
     private final List<SoundClip> removedClips;  // keep track of which clips were actually removed
     // (user can maybe try to remove clips that aren't in the selected album somehow maybe possibly?!?)
-    private final Album album;
-    private final MusicOrganizerWindow view;
+    private Album album;  // album to remove clips from
+    private final MusicOrganizerWindow view;  // reference for updating clips tree in GUI
 
     public RemoveSoundClipCommand(final List<SoundClip> clips, final Album album, final MusicOrganizerWindow view){
+        // constructor
         this.clips = clips;
         this.removedClips = new ArrayList<SoundClip>();
         this.album = album;
+        if (this.album == null){
+            this.album = RootAlbum.get();
+        }
         this.view = view;
 
         assert invariant();
@@ -31,21 +37,20 @@ public class RemoveSoundClipCommand extends Command {
     @Override
     public void execute() {
         for (SoundClip clip: this.clips){
-            if (this.album.remove(clip)){
-                this.removedClips.add(clip);
+            if (this.album.remove(clip)){  // remove the selected clips from selected album
+                this.removedClips.add(clip);  // keep track of the clips that were actually removed
             }
         }
         // TODO: keep track of the albums sub-albums clip removal?
-        this.view.onClipsUpdated();
+        this.view.onClipsUpdated();  // method call for updating GUI
     }
 
     @Override
     public void undo() {
-        for (SoundClip clip: this.removedClips){
+        for (SoundClip clip: this.removedClips){  // add back actually removed sound clips
             this.album.add(clip);
         }
-        // Add back to albums sub-album? <- IMPLEMENT?!?
-        this.view.onClipsUpdated();
+        this.view.onClipsUpdated();  // method call for updating GUI
     }
 
     @Override

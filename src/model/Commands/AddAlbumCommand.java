@@ -6,15 +6,17 @@ import model.Album.SubAlbum;
 import view.MusicOrganizerWindow;
 
 public class AddAlbumCommand extends Command {
-    private Album parentAlbum;
-    private String newAlbumName;
-    private final MusicOrganizerWindow view;
-    private Album newAlbum;
+    // command class for undo-able and redo-able add album action
+    private Album parentAlbum;  // album to add a new sub-album to
+    private String newAlbumName;  // name for the new album
+    private final MusicOrganizerWindow view;  // reference to MusicOrganizerWindow object
+    private Album newAlbum;  // the actual album
 
     public AddAlbumCommand(Album parent, String newAlbumName, final MusicOrganizerWindow view){
+        // constructor
         this.parentAlbum = parent;
         if (this.parentAlbum == null){
-            this.parentAlbum = RootAlbum.get();
+            this.parentAlbum = RootAlbum.get();  // assigns root album as parent if no parent is assigned
         }
         this.newAlbumName = newAlbumName;
         if (this.newAlbumName == null){
@@ -26,14 +28,16 @@ public class AddAlbumCommand extends Command {
 
     @Override
     public void execute() {
-        this.newAlbum = new SubAlbum(this.newAlbumName, this.parentAlbum);
-        this.view.onAlbumAdded(this.newAlbum);
+        this.newAlbum = new SubAlbum(this.newAlbumName, this.parentAlbum);  // create the new album
+        // parent album gets this new album assigned as sub album in constructor
+        this.view.onAlbumAdded(this.newAlbum);  // call method to update album tree
     }
 
     @Override
     public void undo() {
+        // removes this new album from the parent album
         this.parentAlbum.remove(this.newAlbum);
-        this.view.onAlbumRemoved();
+        this.view.onAlbumRemoved();  // call method to update album tree
     }
 
     @Override

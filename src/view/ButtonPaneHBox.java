@@ -141,15 +141,19 @@ public class ButtonPaneHBox extends HBox {
 	}
 
 	private Button createUndoButton() {
-		Button button = new Button("Undo action");
-		button.setTooltip(new Tooltip("Undo last actions up to 10"));
-		button.setMinWidth(BUTTON_MIN_WIDTH);
+		// creates the undo button
+		Button button = new Button("Undo action");  // creates button with text
+		button.setTooltip(new Tooltip("Undo last actions up to 10"));  // tooltip for button
+		button.setMinWidth(BUTTON_MIN_WIDTH);  // sets minimum width of button
 		button.setOnAction(new EventHandler<ActionEvent>() {
 
 			@Override
 			public void handle(ActionEvent arg0) {
-				if (CommandController.get().hasCommands())
+				if (CommandController.get().hasCommands()) {
+					// on button press: check if command controller has commands to undo,
+					// if so, undo the command
 					CommandController.get().undoLastCommand();
+				}
 			}
 
 		});
@@ -157,6 +161,7 @@ public class ButtonPaneHBox extends HBox {
 	}
 
 	private Button createRedoButton() {
+		// creates the redo button
 		Button button = new Button("Redo action");
 		button.setTooltip(new Tooltip("Redo last undo action"));
 		button.setMinWidth(BUTTON_MIN_WIDTH);
@@ -164,8 +169,11 @@ public class ButtonPaneHBox extends HBox {
 
 			@Override
 			public void handle(ActionEvent arg0) {
-				if (CommandController.get().hasRedoableCommands())
+				if (CommandController.get().hasRedoableCommands()) {
+					// on button click: check if command controller has redo-able commands
+					// if so, redo last undid command
 					CommandController.get().redoLastUndo();
+				}
 			}
 
 		});

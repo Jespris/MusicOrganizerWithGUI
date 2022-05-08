@@ -22,6 +22,7 @@ public class AddSoundClipCommand extends Command {
     private final MusicOrganizerWindow view;  // variable to access the onClipsUpdated method
 
     public AddSoundClipCommand(final Album selectedAlbum, final List<SoundClip> soundClips, final MusicOrganizerWindow view){
+        // constructor
         this.selectedAlbum = selectedAlbum;
         if (this.selectedAlbum == null){
             this.selectedAlbum = RootAlbum.get();
@@ -30,7 +31,7 @@ public class AddSoundClipCommand extends Command {
         this.addedClips = new ArrayList<SoundClip>();
         this.view = view;
 
-        assert invariant();
+        assert invariant();  // design by contract stuff
     }
 
     private boolean invariant() {
@@ -41,20 +42,20 @@ public class AddSoundClipCommand extends Command {
     public void execute() {
         for (SoundClip clip: this.soundClips){
             if (this.selectedAlbum.add(clip)){ // adds the clip to the album
-                this.addedClips.add(clip);
+                this.addedClips.add(clip);  // keep track of which clips are actually added to the album
             }
         }
-        // TODO: keep track of to which parent album soundclips are added
-        this.view.onClipsUpdated();
+        // TODO: keep track of to which parent album sound-clips are added
+        this.view.onClipsUpdated();  // method call to update clips tree
     }
 
     @Override
     public void undo() {
-        for (SoundClip clip: this.addedClips){
+        for (SoundClip clip: this.addedClips){  // remove the clips from the album that were actually added
             this.selectedAlbum.remove(clip);
         }
         // TODO: remove from parent albums the added clips (from hashmap)
-        this.view.onClipsUpdated();
+        this.view.onClipsUpdated();  // method call to update clips tree
     }
 
     @Override
