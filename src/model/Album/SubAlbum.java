@@ -23,11 +23,13 @@ public class SubAlbum extends Album{
     }
 
     @Override
-    public boolean add(final SoundClip clip){
+    public boolean add(final SoundClip clip) {
         // adds the song to this album and recursively adds the song to all parentAlbums that doesn't contain it
         // if parent album doesn't contain song, call this method on parent album,
         // recursion stops at rootAlbum since that method is the base "add" method defined in "Album" class
-        return super.add(clip) && (!this.parentAlbum.contains(clip) ? this.parentAlbum.add(clip) : true);
+        // Recursion functionality moved to command (AddSoundClipCommand)
+        super.add(clip);  // adds the sound clip to this album
+        return true;  // for testing purposes
     }
 
     @Override

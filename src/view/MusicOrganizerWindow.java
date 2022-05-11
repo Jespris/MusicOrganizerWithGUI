@@ -111,7 +111,6 @@ public class MusicOrganizerWindow extends Application {
 					// This code gets invoked whenever the user double clicks in the TreeView
 					// TODO: ADD YOUR CODE HERE
 					//  - show sound clip in album in sound clip view
-					System.out.println("Double click in TreeView");
 					displayMessage("Currently selected album: " + getSelectedAlbum().toString());
 					onClipsUpdated();  // update clip view
 				}
@@ -133,7 +132,6 @@ public class MusicOrganizerWindow extends Application {
 					// This code gets invoked whenever the user double clicks in the sound clip table
 					// TODO: ADD YOUR CODE HERE
 					//  - Play the sound clip
-					System.out.println("Double click on sound clip table");
 					displayMessage("Playing selected sound clip(s)");
 					controller.playSoundClips();
 				}

@@ -13,18 +13,12 @@ public class RemoveSoundClipCommand extends Command {
     private final List<SoundClip> clips;  // the inputted clips to remove
     private final List<SoundClip> removedClips;  // keep track of which clips were actually removed
     // (user can maybe try to remove clips that aren't in the selected album somehow maybe possibly?!?)
-    private Album album;  // album to remove clips from
-    private final MusicOrganizerWindow view;  // reference for updating clips tree in GUI
 
     public RemoveSoundClipCommand(final List<SoundClip> clips, final Album album, final MusicOrganizerWindow view){
+        super(album, view);
         // constructor
         this.clips = clips;
         this.removedClips = new ArrayList<SoundClip>();
-        this.album = album;
-        if (this.album == null){
-            this.album = RootAlbum.get();
-        }
-        this.view = view;
 
         assert invariant();
     }
