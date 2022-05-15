@@ -29,7 +29,6 @@ public class MusicOrganizerWindow extends Application {
 	
 	private BorderPane bord;
 	private static MusicOrganizerController controller;
-	private TreeItem<Album> rootNode;
 	private TreeView<Album> tree;
 	private ButtonPaneHBox buttons;
 	private SoundClipListView soundClipTable;
@@ -65,6 +64,7 @@ public class MusicOrganizerWindow extends Application {
 
 			// Create the tree in the left of the GUI
 			tree = createTreeView();
+			tree.setShowRoot(false);
 			bord.setLeft(tree);
 			
 			// Create the list in the right of the GUI
@@ -100,8 +100,13 @@ public class MusicOrganizerWindow extends Application {
 	}
 	
 	private TreeView<Album> createTreeView(){
-		rootNode = new TreeItem<>(controller.getRootAlbum());
-		TreeView<Album> v = new TreeView<>(rootNode);
+		final TreeItem<Album> flagNode = new TreeItem<>(controller.getFlagAlbum());
+		final TreeItem<Album> ratingNode = new TreeItem<>(controller.getRatingAlbum());
+		final TreeItem<Album> rootAlbumNode = new TreeItem<>(controller.getRootAlbum());
+		final TreeItem<Album> dummyNode = new TreeItem<Album>();
+		dummyNode.getChildren().addAll(flagNode, ratingNode, rootAlbumNode);
+
+		TreeView<Album> v = new TreeView<>(dummyNode);
 		
 		v.setOnMouseClicked(new EventHandler<MouseEvent>() {
 
@@ -195,6 +200,21 @@ public class MusicOrganizerWindow extends Application {
 			return null;
 		}
 	}
+
+	public String promptForSoundClipRating(){
+		// TODO: force integer input somehow?
+		TextInputDialog dialog = new TextInputDialog();
+
+		dialog.setTitle("Enter sound clip(s) rating");
+		dialog.setHeaderText(null);
+		dialog.setContentText("Please enter integer rating 0-5 for selected sound clip(s)");
+		Optional<String> result = dialog.showAndWait();
+		if (result.isPresent()){
+			return result.get();
+		} else {
+			return null;
+		}
+	}
 	
 	/**
 	 * Return all the sound clips currently selected in the clip table.
@@ -222,6 +242,10 @@ public class MusicOrganizerWindow extends Application {
 		TreeItem<Album> newItem = new TreeItem<>(newAlbum);
 		parentItem.getChildren().add(newItem);
 		parentItem.setExpanded(true); // automatically expand the parent node in the tree
+	}
+
+	public void onSearchBasedAlbumAdded(Album album){
+		TreeItem<Album> newItem = new TreeItem<>(album);
 	}
 	
 	/**

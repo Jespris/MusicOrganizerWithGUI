@@ -5,6 +5,8 @@ import java.util.Set;
 
 import model.*;
 import model.Album.Album;
+import model.Album.FlaggedSoundClipsAlbum;
+import model.Album.GreatSoundClipsAlbum;
 import model.Album.RootAlbum;
 import model.Commands.AddAlbumCommand;
 import model.Commands.AddSoundClipCommand;
@@ -56,6 +58,14 @@ public class MusicOrganizerController {
 	public Album getRootAlbum(){
 		// returns the RootAlbum singleton
 		return RootAlbum.get();
+	}
+
+	public Album getFlagAlbum() {
+		return FlaggedSoundClipsAlbum.getInstance();
+	}
+
+	public Album getRatingAlbum() {
+		return GreatSoundClipsAlbum.getInstance();
 	}
 	
 	/**
@@ -112,6 +122,14 @@ public class MusicOrganizerController {
 		command.execute();
 		CommandController.get().addNewCommand(command);
 	}
+
+	public void toggleSoundClipsFlag(){
+		// TODO: this
+	}
+
+	public void setSoundClipsRating(){
+		// TODO: this
+	}
 	
 	/**
 	 * Puts the selected sound clips on the queue and lets
@@ -127,4 +145,6 @@ public class MusicOrganizerController {
 			view.displayMessage("Playing " + soundClip);
 		}
 	}
+
+
 }
