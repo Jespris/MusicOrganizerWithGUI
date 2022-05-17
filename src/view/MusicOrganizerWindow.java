@@ -10,7 +10,6 @@ import javafx.event.EventHandler;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import model.Album.Album;
-import model.Album.RootAlbum;
 import model.SoundClip;
 import javafx.scene.Scene;
 import javafx.scene.control.ScrollPane;
@@ -117,6 +116,7 @@ public class MusicOrganizerWindow extends Application {
 					// TODO: ADD YOUR CODE HERE
 					//  - show sound clip in album in sound clip view
 					displayMessage("Currently selected album: " + getSelectedAlbum().toString());
+					getSelectedAlbum();
 					onClipsUpdated();  // update clip view
 				}
 			}
@@ -174,7 +174,15 @@ public class MusicOrganizerWindow extends Application {
 	
 	public Album getSelectedAlbum() {
 		TreeItem<Album> selectedItem = getSelectedTreeItem();
-		return selectedItem == null ? null : selectedItem.getValue();
+		if (selectedItem == null){
+			return null;
+		}
+
+		onAlbumSelectedDisableButtons(selectedItem.getValue().isSearchBasedAlbum());
+		// if the selected album is search based, call a method that disables the add/remove album/soundclip buttons,
+		// since those actions cannot be done with that type of album
+
+		return selectedItem.getValue();
 	}
 	
 	private TreeItem<Album> getSelectedTreeItem(){
@@ -242,6 +250,14 @@ public class MusicOrganizerWindow extends Application {
 		TreeItem<Album> newItem = new TreeItem<>(newAlbum);
 		parentItem.getChildren().add(newItem);
 		parentItem.setExpanded(true); // automatically expand the parent node in the tree
+	}
+
+	public void onAlbumSelectedDisableButtons(boolean searchBased){
+		if (searchBased) {
+			buttons.disableButtonsOnSearchBasedAlbumSelected();
+		} else {
+			buttons.activateButtonsOnNonSearchBasedAlbumSelected();
+		}
 	}
 
 	public void onSearchBasedAlbumAdded(Album album){

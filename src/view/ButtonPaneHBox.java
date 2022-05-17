@@ -21,10 +21,11 @@ public class ButtonPaneHBox extends HBox {
 	private Button playButton;
 	private Button undoButton;
 	private Button redoButton;
+	private Button flagButton;
+	private Button ratingButton;
 	public static final int BUTTON_MIN_WIDTH = 150;
 
-	
-	
+
 	public ButtonPaneHBox(MusicOrganizerController contr, MusicOrganizerWindow view) {
 		super();
 		this.controller = contr;
@@ -51,7 +52,25 @@ public class ButtonPaneHBox extends HBox {
 		redoButton = createRedoButton();
 		this.getChildren().add(redoButton);
 		
+		flagButton = createFlagButton();
+		this.getChildren().add(flagButton);
 
+		ratingButton = createRatingButton();
+		this.getChildren().add(ratingButton);
+	}
+
+	public void disableButtonsOnSearchBasedAlbumSelected(){
+		newAlbumButton.setDisable(true);
+		deleteAlbumButton.setDisable(true);
+		addSoundClipsButton.setDisable(true);
+		removeSoundClipsButton.setDisable(true);
+	}
+
+	public void activateButtonsOnNonSearchBasedAlbumSelected(){
+		newAlbumButton.setDisable(false);
+		deleteAlbumButton.setDisable(false);
+		addSoundClipsButton.setDisable(false);
+		removeSoundClipsButton.setDisable(false);
 	}
 
 	/*
@@ -174,6 +193,38 @@ public class ButtonPaneHBox extends HBox {
 					// if so, redo last undid command
 					CommandController.get().redoLastUndo();
 				}
+			}
+
+		});
+		return button;
+	}
+
+	private Button createFlagButton(){
+		// creates the flag button
+		Button button = new Button("Toggle flag");
+		button.setTooltip(new Tooltip("Toggle flag on the selected album"));
+		button.setMinWidth(BUTTON_MIN_WIDTH);
+		button.setOnAction(new EventHandler<ActionEvent>() {
+
+			@Override
+			public void handle(ActionEvent arg0) {
+
+			}
+
+		});
+		return button;
+	}
+
+	private Button createRatingButton(){
+		// creates the flag button
+		Button button = new Button("Set rating");
+		button.setTooltip(new Tooltip("Set a rating for the selected sound clip(s)"));
+		button.setMinWidth(BUTTON_MIN_WIDTH);
+		button.setOnAction(new EventHandler<ActionEvent>() {
+
+			@Override
+			public void handle(ActionEvent arg0) {
+
 			}
 
 		});

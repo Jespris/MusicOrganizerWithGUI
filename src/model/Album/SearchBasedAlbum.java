@@ -16,6 +16,11 @@ public abstract class SearchBasedAlbum extends Album{
     public abstract List<SoundClip> getSoundClips();
 
     @Override
+    public boolean isSearchBasedAlbum(){
+        return true;
+    }
+
+    @Override
     public boolean add(Album album){
         return false;
     }

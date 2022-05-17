@@ -23,6 +23,10 @@ public abstract class Album implements AlbumInterface{
         this.songs = new ArrayList<SoundClip>();
     }
 
+    public boolean isSearchBasedAlbum(){
+        return false;
+    }
+
     //  methods that all albums should have below:
     @Override
     public boolean add(final SoundClip clip){
