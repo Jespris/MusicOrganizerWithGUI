@@ -11,8 +11,6 @@ public abstract class SearchBasedAlbum extends Album{
         super(albumName);
     }
 
-    public abstract void add(ArrayList<SoundClip> clips);
-    public abstract void remove(ArrayList<SoundClip> clips);
     public abstract List<SoundClip> getSoundClips();  // template method
 
     @Override
