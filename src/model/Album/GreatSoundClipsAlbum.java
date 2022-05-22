@@ -26,6 +26,11 @@ public class GreatSoundClipsAlbum extends SearchBasedAlbum{
     @Override
     public List<SoundClip> getSoundClips() {
         ArrayList<SoundClip> clips = new ArrayList<>();
+        for (SoundClip clip: RootAlbum.get().getSoundClips()){
+            if (clip.getRating() >= 4){
+                clips.add(clip);
+            }
+        }
         return clips;
     }
 

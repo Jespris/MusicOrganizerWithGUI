@@ -35,7 +35,6 @@ public class RemoveSoundClipCommand extends Command {
                 this.removedClips.add(clip);  // keep track of the clips that were actually removed
             }
         }
-        // TODO: keep track of the albums sub-albums clip removal?
         this.view.onClipsUpdated();  // method call for updating GUI
     }
 

@@ -26,6 +26,11 @@ public class FlaggedSoundClipsAlbum extends SearchBasedAlbum{
     @Override
     public List<SoundClip> getSoundClips() {
         ArrayList<SoundClip> clips = new ArrayList<>();
+        for (SoundClip clip: RootAlbum.get().getSoundClips()){
+            if (clip.isFlagged()){
+                clips.add(clip);
+            }
+        }
         return clips;
     }
 

@@ -8,10 +8,7 @@ import model.Album.Album;
 import model.Album.FlaggedSoundClipsAlbum;
 import model.Album.GreatSoundClipsAlbum;
 import model.Album.RootAlbum;
-import model.Commands.AddAlbumCommand;
-import model.Commands.AddSoundClipCommand;
-import model.Commands.RemoveAlbumCommand;
-import model.Commands.RemoveSoundClipCommand;
+import model.Commands.*;
 import view.MusicOrganizerWindow;
 
 public class MusicOrganizerController {
@@ -61,74 +58,82 @@ public class MusicOrganizerController {
 	}
 
 	public Album getFlagAlbum() {
+		// returns the FlagAlbum singleton
 		return FlaggedSoundClipsAlbum.getInstance();
 	}
 
 	public Album getRatingAlbum() {
+		// returns the RatingAlbum singleton
 		return GreatSoundClipsAlbum.getInstance();
 	}
 	
 	/**
 	 * Adds an album to the Music Organizer
 	 */
-	public void addNewAlbum(){ //TODO Update parameters if needed -
-		//  - e.g. you might want to give the currently selected album as parameter
-		// TODO: Add your code here
+	public void addNewAlbum(){
 		// the currently selected album as parent,
 		// if none selected => parent album is null => root album is parent (defined in SubAlbum constructor)
 		// albumName comes from the input prompt
 
 		String albumName = view.promptForAlbumName();
 		AddAlbumCommand command = new AddAlbumCommand(view.getSelectedAlbum(), albumName, this.view);
-		command.execute();
 		CommandController.get().addNewCommand(command);
+
+		this.view.updateCommandButtonsActive();
 	}
 	
 	/**
 	 * Removes an album from the Music Organizer
 	 */
-	public void deleteAlbum(){ //TODO Update parameters if needed
-		// TODO: Add your code here
+	public void deleteAlbum(){
 		// delete currently selected album (and all it's subAlbums?)
 		if (this.view.getSelectedAlbum() != RootAlbum.get() || this.view.getSelectedAlbum() != null){
 			RemoveAlbumCommand command = new RemoveAlbumCommand(this.view.getSelectedAlbum(), this.view);
-			command.execute();
 			CommandController.get().addNewCommand(command);
+			this.view.updateCommandButtonsActive();
 		} else {
 			this.view.displayMessage("Cannot remove root album!");
 		}
-
 	}
 	
 	/**
 	 * Adds sound clips to an album
 	 */
-	public void addSoundClips(){ //TODO Update parameters if needed
-		// TODO: Add your code here
+	public void addSoundClips(){
 		// add sound clip to currently selected album (which automatically adds the clip to all parents)
 		// if no album is selected => add to root
 		AddSoundClipCommand command = new AddSoundClipCommand(view.getSelectedAlbum(), this.view.getSelectedSoundClips(), this.view);
-		command.execute();
 		CommandController.get().addNewCommand(command);
+
+		this.view.updateCommandButtonsActive();
 	}
 	
 	/**
 	 * Removes sound clips from an album
 	 */
-	public void removeSoundClips(){ //TODO Update parameters if needed
-		// TODO: Add your code here
+	public void removeSoundClips(){
 		// remove from currently selected album currently selected soundclip(s)
 		RemoveSoundClipCommand command = new RemoveSoundClipCommand(this.view.getSelectedSoundClips(), this.view.getSelectedAlbum(), this.view);
-		command.execute();
 		CommandController.get().addNewCommand(command);
+
+		this.view.updateCommandButtonsActive();
 	}
 
 	public void toggleSoundClipsFlag(){
-		// TODO: this
+		// make the command and add it to the command stack in command controller, it gets executed there
+		ToggleFlagCommand command = new ToggleFlagCommand(this.view.getSelectedAlbum(), this.view, this.view.getSelectedSoundClips());
+		CommandController.get().addNewCommand(command);
+
+		this.view.updateCommandButtonsActive();
 	}
 
 	public void setSoundClipsRating(){
-		// TODO: this
+		// make the command and add it to the command stack in command controller, it gets executed there
+		int rating = this.view.promptForSoundClipRating();
+		SetRatingCommand command = new SetRatingCommand(this.view.getSelectedAlbum(), this.view, this.view.getSelectedSoundClips(), rating);
+		CommandController.get().addNewCommand(command);
+
+		this.view.updateCommandButtonsActive();
 	}
 	
 	/**
@@ -146,5 +151,15 @@ public class MusicOrganizerController {
 		}
 	}
 
+	public void undoCommand() {
+		// uses CommandController singleton to execute undo command
+		CommandController.get().undoLastCommand();
+		this.view.updateCommandButtonsActive();
+	}
 
+	public void redoCommand() {
+		// uses CommandController singleton to execute redo command
+		CommandController.get().redoLastUndo();
+		this.view.updateCommandButtonsActive();
+	}
 }

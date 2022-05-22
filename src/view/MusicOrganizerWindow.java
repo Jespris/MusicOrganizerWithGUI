@@ -3,6 +3,7 @@ package view;
 import java.util.List;
 import java.util.Optional;
 
+import controller.CommandController;
 import controller.MusicOrganizerController;
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -10,6 +11,7 @@ import javafx.event.EventHandler;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import model.Album.Album;
+import model.Album.RootAlbum;
 import model.SoundClip;
 import javafx.scene.Scene;
 import javafx.scene.control.ScrollPane;
@@ -38,7 +40,9 @@ public class MusicOrganizerWindow extends Application {
 		controller = new MusicOrganizerController();
 		if (args.length == 0) {
 			// path is for the moment absolute and only works on Jesper's computer
-			controller.loadSoundClips("C:\\Users\\jespe\\Downloads\\OOD_Task2_InitialFiles\\OOD_Task2_initialFiles_RENAME_PROJECT\\src\\sample-sound");
+			String path = "C:\\Users\\jespe\\Downloads\\OOD_Task2_InitialFiles\\OOD_Task2_initialFiles_RENAME_PROJECT";
+			// change the above path to get code to work on your computer
+			controller.loadSoundClips(path + "\\src\\sample-sound");
 		} else if (args.length == 1) {
 			controller.loadSoundClips(args[0]);
 		} else {
@@ -59,6 +63,7 @@ public class MusicOrganizerWindow extends Application {
 			
 			// Create buttons in the top of the GUI
 			buttons = new ButtonPaneHBox(controller, this);
+			updateCommandButtonsActive();
 			bord.setTop(buttons);
 
 			// Create the tree in the left of the GUI
@@ -209,18 +214,18 @@ public class MusicOrganizerWindow extends Application {
 		}
 	}
 
-	public String promptForSoundClipRating(){
-		// TODO: force integer input somehow?
+	public int promptForSoundClipRating(){
+		// this method prompts the user for inputting a rating for sound clips
 		TextInputDialog dialog = new TextInputDialog();
 
-		dialog.setTitle("Enter sound clip(s) rating");
+		dialog.setTitle("Enter sound clip(s) rating"); // title
 		dialog.setHeaderText(null);
-		dialog.setContentText("Please enter integer rating 0-5 for selected sound clip(s)");
+		dialog.setContentText("Please enter integer rating 0-5 for selected sound clip(s)"); // prompt
 		Optional<String> result = dialog.showAndWait();
 		if (result.isPresent()){
-			return result.get();
+			return Integer.parseInt(result.get());  // returns the int value user inputted
 		} else {
-			return null;
+			return 0;
 		}
 	}
 	
@@ -253,6 +258,7 @@ public class MusicOrganizerWindow extends Application {
 	}
 
 	public void onAlbumSelectedDisableButtons(boolean searchBased){
+		// if a search based album is selected, disable the buttons that adds / removes albums / sound clips
 		if (searchBased) {
 			buttons.disableButtonsOnSearchBasedAlbumSelected();
 		} else {
@@ -260,8 +266,10 @@ public class MusicOrganizerWindow extends Application {
 		}
 	}
 
-	public void onSearchBasedAlbumAdded(Album album){
-		TreeItem<Album> newItem = new TreeItem<>(album);
+	public void updateCommandButtonsActive(){
+		// this method updates the undo / redo buttons to indicate when the user can undo an action or redo an action
+		buttons.updateUndoButton(CommandController.get().hasCommands());
+		buttons.updateRedoButton(CommandController.get().hasRedoableCommands());
 	}
 	
 	/**
@@ -279,6 +287,9 @@ public class MusicOrganizerWindow extends Application {
 	 */
 	public void onClipsUpdated(){
 		Album a = getSelectedAlbum();
+		if (a == null){
+			a = RootAlbum.get();
+		}
 		soundClipTable.display(a);
 	}
 	

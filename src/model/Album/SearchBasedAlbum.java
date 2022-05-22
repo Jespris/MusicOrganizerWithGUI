@@ -13,7 +13,7 @@ public abstract class SearchBasedAlbum extends Album{
 
     public abstract void add(ArrayList<SoundClip> clips);
     public abstract void remove(ArrayList<SoundClip> clips);
-    public abstract List<SoundClip> getSoundClips();
+    public abstract List<SoundClip> getSoundClips();  // template method
 
     @Override
     public boolean isSearchBasedAlbum(){

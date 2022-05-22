@@ -171,7 +171,7 @@ public class ButtonPaneHBox extends HBox {
 				if (CommandController.get().hasCommands()) {
 					// on button press: check if command controller has commands to undo,
 					// if so, undo the command
-					CommandController.get().undoLastCommand();
+					controller.undoCommand();
 				}
 			}
 
@@ -191,7 +191,7 @@ public class ButtonPaneHBox extends HBox {
 				if (CommandController.get().hasRedoableCommands()) {
 					// on button click: check if command controller has redo-able commands
 					// if so, redo last undid command
-					CommandController.get().redoLastUndo();
+					controller.redoCommand();
 				}
 			}
 
@@ -208,7 +208,8 @@ public class ButtonPaneHBox extends HBox {
 
 			@Override
 			public void handle(ActionEvent arg0) {
-
+				// call method in controller on button press
+				controller.toggleSoundClipsFlag();
 			}
 
 		});
@@ -224,10 +225,21 @@ public class ButtonPaneHBox extends HBox {
 
 			@Override
 			public void handle(ActionEvent arg0) {
-
+				// call method in controller on button press
+				controller.setSoundClipsRating();
 			}
 
 		});
 		return button;
+	}
+
+	public void updateUndoButton(boolean hasCommands) {
+		// helper methods for updating button active / disable
+		this.undoButton.setDisable(!hasCommands);
+	}
+
+	public void updateRedoButton(boolean hasRedoableCommands) {
+		// helper methods for updating button active / disable
+		this.redoButton.setDisable(!hasRedoableCommands);
 	}
 }

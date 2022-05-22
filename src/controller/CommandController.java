@@ -26,7 +26,9 @@ public class CommandController {
     }
 
     public void addNewCommand(Command command){
-        // assume command is executed
+        // execute command
+        assert command != null;
+        command.execute();
         // this method is called whenever a new command is done by the user
         // method call generally from the MusicOrganizerController class
         if (this.commandStack.size() < 10){
@@ -68,11 +70,15 @@ public class CommandController {
 
     public boolean hasCommands(){
         // helper method to check if stack has commands
-        return !this.commandStack.isEmpty();
+        boolean hasCommands = !this.commandStack.isEmpty();
+        System.out.println("Command controller has commands: " + hasCommands);
+        return hasCommands;
     }
 
     public boolean hasRedoableCommands(){
         // helper stack to check if undo stack has redo-able commands
-        return !this.undoStack.isEmpty();
+        boolean hasRedoAbleCommands = !this.undoStack.isEmpty();
+        System.out.println("Command controller has redo-able commands: " + hasRedoAbleCommands);
+        return hasRedoAbleCommands;
     }
 }
